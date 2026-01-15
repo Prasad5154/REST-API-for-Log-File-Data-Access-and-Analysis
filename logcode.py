@@ -10,12 +10,7 @@ LOG_DIR = "./logs"
 app = FastAPI(title="Log File Analysis API")
 
 
-# -------------------------
-# Utility Functions
-# -------------------------
-
 def generate_log_id(raw_line: str) -> str:
-    """Generate deterministic unique ID from log line."""
     return hashlib.sha1(raw_line.encode()).hexdigest()
 
 
@@ -38,7 +33,6 @@ def parse_log_line(line: str) -> Optional[Dict]:
 
 
 def read_logs():
-    """Generator that yields parsed log entries."""
     if not os.path.exists(LOG_DIR):
         return
 
@@ -50,10 +44,6 @@ def read_logs():
                     if log:
                         yield log
 
-
-# -------------------------
-# API Endpoints
-# -------------------------
 
 @app.get("/logs")
 def get_logs(
@@ -116,3 +106,4 @@ def get_log_by_id(log_id: str):
             return log
 
     raise HTTPException(status_code=404, detail="Log entry not found")
+
